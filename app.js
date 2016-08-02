@@ -50,7 +50,7 @@ app.use(passport.session());
 
 
 app.get('/', function (req, res) {
-    res.render('home', { username: req.user.id });
+    res.render('home', { username: req.user.access_token });
 });
 
 app.get('/login', function (req, res) {
