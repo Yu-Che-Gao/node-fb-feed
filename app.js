@@ -3,9 +3,10 @@ const passport = require('passport');
 const FacebookStrategy = require('passport-facebook').Strategy;
 const express = require('express');
 const app = express();
-FB.setAccessToken('EAACEdEose0cBAPMz24pSaytmOGaE99NBU6rydAbdKLP5AJ4ZBUfv5gBZABCkhDQoO5S730h6UZCrSQpEH5MoEqT3LQKJnHod3ndc0NE4BBBMVSjTr3fKqSemnodNfNtYZCopZAGRMNeGdQYhs7hsyS7eWVDYZCUn3ASuFVmyTNBQZDZD');
+const port = process.env.PORT || 80;
+// FB.setAccessToken('EAACEdEose0cBAPMz24pSaytmOGaE99NBU6rydAbdKLP5AJ4ZBUfv5gBZABCkhDQoO5S730h6UZCrSQpEH5MoEqT3LQKJnHod3ndc0NE4BBBMVSjTr3fKqSemnodNfNtYZCopZAGRMNeGdQYhs7hsyS7eWVDYZCUn3ASuFVmyTNBQZDZD');
 
-var message = 'Hi from facebook-node-sdk';
+// var message = 'Hi from facebook-node-sdk';
 // FB.api({ method: 'stream.publish', message: message }, function (res) {
 //     if(!res || res.error_msg) {
 //         console.log(!res ? 'error occurred' : res.error_msg);
@@ -43,4 +44,8 @@ app.get('/auth/facebook', passport.authenticate('facebook'));
 
 app.get('/auth/facebook/callback', passport.authenticate('facebook', { failureRedirect: '/login' }), function (req, res) {
     res.redirect('/');
+});
+
+app.listen(port, function () {
+    console.log('listening on port ' + port);
 });
