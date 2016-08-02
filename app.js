@@ -17,6 +17,8 @@ const port = process.env.PORT || 80;
 // });
 
 
+
+
 app.set('view engine', 'pug');
 
 //facebook-api-bots應用程式
@@ -29,6 +31,23 @@ passport.use(new FacebookStrategy({
         return cb(null, profile);
     }
 ));
+
+passport.serializeUser(function (user, cb) {
+    cb(null, user);
+});
+
+passport.deserializeUser(function (obj, cb) {
+    cb(null, obj);
+});
+
+app.use(require('morgan')('combined'));
+app.use(require('cookie-parser')());
+app.use(require('body-parser').urlencoded({ extended: true }));
+app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 
 app.get('/', function (req, res) {
     res.render('home', { user: req.user });
