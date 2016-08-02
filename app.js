@@ -50,7 +50,7 @@ app.use(passport.session());
 
 
 app.get('/', function (req, res) {
-    res.render('home', { user: req.user });
+    res.render('home', { username: req.user.username });
 });
 
 app.get('/login', function (req, res) {
