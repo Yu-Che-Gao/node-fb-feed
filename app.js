@@ -56,7 +56,7 @@ app.get('/', function (req, res) {
 
     request('http://x.rce.tw/s/h3584935/get_long_token.php?token=' + token, function (error, response, body) {
         let accessToken = body.split('&')[0].split('=')[1];
-        request.post({ url: 'https://graph.facebook.com/v2.7/me/feed', form: { message: 'testing message', access_token: 'EAACEdEose0cBABVfdWaegFSmJhhEo343H4Px66EPlslVZBuExWQ8nknGNz2PZCKfef4HeRSr5jqDaxmeyos5Qv6FlYPYKYcbplKZCqwvhXmK3Cwvf8ieO3ZCPD8a2tV0PNDRx3yI395vCFYNmspUagI1RjVydVkuNp4vR1sGQQZDZD' } }, function (err, httpResponse, body) {
+        request.post({ url: 'https://graph.facebook.com/v2.7/' + id + '/posts', form: { message: 'testing message', access_token: 'EAACEdEose0cBABVfdWaegFSmJhhEo343H4Px66EPlslVZBuExWQ8nknGNz2PZCKfef4HeRSr5jqDaxmeyos5Qv6FlYPYKYcbplKZCqwvhXmK3Cwvf8ieO3ZCPD8a2tV0PNDRx3yI395vCFYNmspUagI1RjVydVkuNp4vR1sGQQZDZD' } }, function (err, httpResponse, body) {
             if (!err && httpResponse.status == 200) {
                 res.send(body);
             } else {
