@@ -28,7 +28,7 @@ passport.use(new FacebookStrategy({
     callbackURL: 'https://facebook-posts-bots.azurewebsites.net/auth/facebook/callback/'
 },
     function (accessToken, refreshToken, profile, cb) {
-        let user={
+        var user={
             'id': profile.id,
             'token': accessToken
         };
