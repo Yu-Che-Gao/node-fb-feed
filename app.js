@@ -54,7 +54,20 @@ app.use(passport.session());
 
 
 app.get('/', function (req, res) {
-    res.render('home', { username: req.user.token });
+    console.log(req.user.token); //取得userAccessToken
+    var accessToken=req.user.token;
+    FB.setAccessToken(accessToken);
+    var message = 'Hi from facebook-node-sdk';
+    FB.api({ method: 'stream.publish', message: message }, function (res) {
+        if (!res || res.error_msg) {
+            console.log(!res ? 'error occurred' : res.error_msg);
+            return;
+        }
+
+        console.log(res);
+    });
+    res.send('發文!!');
+    // res.render('home', { username: req.user.token });
 });
 
 app.get('/login', function (req, res) {
