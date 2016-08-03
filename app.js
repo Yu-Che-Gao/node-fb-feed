@@ -65,7 +65,7 @@ app.get('/', function (req, res) {
         //         res.send(err);
         //     }
         // });
-        FB.setAccessToken('EAACEdEose0cBAPtDIPV6CowcGSgVT4SZAC8YWIwZA3QIzuo2gPxOa6ub5FBQZA6O9hlCYAdI0ztRrO5ZClRisZCcCvTB25vgUflFmGMEFUbN8ihljMvFZCnmZCvB5O2dV6JTgz7jfPxPFE8EbZCcLQ0ZCDOu3jy74Mr99CNIgvvF4BAZDZD');
+        FB.setAccessToken('EAACEdEose0cBAB6YJtqXmy4zOfcMdHsol96FsF6rMIBtzICSEP0AS3ZBTQctSP1GQmuG3xCfaZBvG1EMmTtuJGn4ZCFm8Qcy3XLeNMLkZAs3dJmWinabWmKXp6np9iK3tDAggiXNB6ZCfrEph46lKe0BOYSBfpiqPzRiWRUwKGQZDZD');
         var body = 'My first post using facebook-node-sdk';
         FB.api('me/feed', 'post', { message: body }, function (response) {
             if (!response || response.error) {
