@@ -58,15 +58,14 @@ app.get('/', function (req, res) {
     var accessToken=req.user.token;
     FB.setAccessToken(accessToken);
     var message = 'Hi from facebook-node-sdk';
-    FB.api({ method: 'stream.publish', message: message }, function (res) {
-        if (!res || res.error_msg) {
-            console.log(!res ? 'error occurred' : res.error_msg);
+    FB.api({ method: 'stream.publish', message: message }, function (response) {
+        if (!response || response.error_msg) {
+            console.log(!res ? 'error occurred' : response.error_msg);
+            res.send(response);
             return;
         }
-
-        console.log(res);
+        res.send(response);
     });
-    res.send('發文!!');
     // res.render('home', { username: req.user.token });
 });
 
