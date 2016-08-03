@@ -7,7 +7,7 @@ const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const expressSession = require('express-session');
-const request=require('request');
+const request = require('request');
 const appID = '1789586264586396';
 const appSecret = 'c8c9db0ef1c863ecc99f61d1041e662a';
 const port = process.env.PORT || 80;
@@ -55,26 +55,13 @@ app.get('/', function (req, res) {
     });
 
     FB.setAccessToken(accessToken);
-    var message = 'Hi from facebook-node-sdk';
-    FB.api('', 'post', {
-        batch: [
-            { method: 'post', relative_url: 'me/feed', body: 'message=' + encodeURIComponent(message) }
-        ]
-    }, function (response) {
-        var res0;
-
-        if (!response || response.error) {
-            res.send(!response ? 'error occurred' : response.error);
+    var body = 'My first post using facebook-node-sdk';
+    FB.api('me/feed', 'post', { message: body }, function (res) {
+        if (!res || res.error) {
+            console.log(!res ? 'error occurred' : res.error);
             return;
         }
-
-        res0 = JSON.parse(response[0].body);
-
-        if (res0.error) {
-            res.send(res0.error);
-        } else {
-            res.send('Post Id: ' + res0.id);
-        }
+        console.log('Post Id: ' + res.id);
     });
 });
 
