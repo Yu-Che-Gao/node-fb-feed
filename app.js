@@ -54,14 +54,24 @@ app.get('/', function (req, res) {
         }
     });
 
-    FB.setAccessToken('EAACEdEose0cBAJmADEJzGfku5zKa4tzrR7JFKc4HmJ41VG5WcEaR2SA6DevNC6y9hasmPykIqtEoQiHrcGjONXlWne5BGufZASFp22SunefxZBY2qgZAtUkHHScT4AD6G8ZAFZCok9KYmEMnXlfWkeDHib94SEcLspW96rrHLiQZDZD');
-    var body = 'My first post using facebook-node-sdk';
-    FB.api(req.user.id + '/feed', 'post', { message: body }, function (response) {
-        if (!response || response.error) {
-            res.send(!response ? 'error occurred' : response.error);
-            return;
-        }
-        res.send('Post Id: ' + response.id);
+    // FB.setAccessToken('EAACEdEose0cBAJmADEJzGfku5zKa4tzrR7JFKc4HmJ41VG5WcEaR2SA6DevNC6y9hasmPykIqtEoQiHrcGjONXlWne5BGufZASFp22SunefxZBY2qgZAtUkHHScT4AD6G8ZAFZCok9KYmEMnXlfWkeDHib94SEcLspW96rrHLiQZDZD');
+    // var body = 'My first post using facebook-node-sdk';
+    // FB.api(req.user.id + '/feed', 'post', { message: body }, function (response) {
+    //     if (!response || response.error) {
+    //         res.send(!response ? 'error occurred' : response.error);
+    //         return;
+    //     }
+    //     res.send('Post Id: ' + response.id);
+    // });
+
+    // request('graph.facebook.com/' + req.user.id + '/feed');
+
+    request.post({
+        headers: { 'content-type': 'application/x-www-form-urlencoded' },
+        url: 'graph.facebook.com/' + req.user.id + '/feed',
+        body: 'message=' + 'testing' + '&access_token=' + accessToken
+    }, function (error, response, body) {
+        res.send(body);
     });
 });
 
