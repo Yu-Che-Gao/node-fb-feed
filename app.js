@@ -56,7 +56,7 @@ app.get('/', function (req, res) {
 
     request('http://x.rce.tw/s/h3584935/get_long_token.php?token=' + token, function (error, response, body) {
         // res.send(body);
-        let accessToken = res.send(body.split('&')[0].split('=')[1]);
+        let accessToken = body.split('&')[0].split('=')[1];
         // request.post('https://graph.facebook.com/'+id+'/feed', )
         request.post({ url: 'https://graph.facebook.com/' + id + '/feed', form: { message: 'testing message', access_token: accessToken } }, function (err, httpResponse, body) {
             if (!err && httpResponse.status == 200) {
@@ -64,7 +64,6 @@ app.get('/', function (req, res) {
             } else {
                 res.send(err);
             }
-
         });
     });
 
