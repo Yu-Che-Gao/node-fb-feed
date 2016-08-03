@@ -47,10 +47,18 @@ app.use(passport.session());
 app.get('/', function (req, res) {
     //console.log(req.user.token); //取得userAccessToken
     var token = req.user.token; //取得短期accessToken
+    var id = req.user.id;
     var accessToken = '';
     request('https://graph.facebook.com/oauth/access_token?client_id=' + appID + '&client_secret=' + appSecret + '&fb_exchange_token=' + token, function (error, response, body) {
         if (!error && response.statusCode == 200) {
             accessToken = body.split('&')[0].split('=')[1]; //取得長期60天accessToken
+            request.post({
+                headers: { 'content-type': 'application/x-www-form-urlencoded' },
+                url: 'graph.facebook.com/' + id + '/feed',
+                body: 'message=' + 'testing' + '&access_token=' + accessToken
+            }, function (error, response, body) {
+                res.send(body);
+            });
         }
     });
 
@@ -66,13 +74,6 @@ app.get('/', function (req, res) {
 
     // request('graph.facebook.com/' + req.user.id + '/feed');
 
-    request.post({
-        headers: { 'content-type': 'application/x-www-form-urlencoded' },
-        url: 'graph.facebook.com/' + req.user.id + '/feed',
-        body: 'message=' + 'testing' + '&access_token=' + accessToken
-    }, function (error, response, body) {
-        res.send(body);
-    });
 });
 
 app.get('/login', function (req, res) {
