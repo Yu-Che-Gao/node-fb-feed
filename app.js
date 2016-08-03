@@ -56,12 +56,12 @@ app.get('/', function (req, res) {
 
     FB.setAccessToken(accessToken);
     var body = 'My first post using facebook-node-sdk';
-    FB.api('me/feed', 'post', { message: body }, function (res) {
-        if (!res || res.error) {
-            console.log(!res ? 'error occurred' : res.error);
+    FB.api('me/feed', 'post', { message: body }, function (response) {
+        if (!response || response.error) {
+            res.send(!response ? 'error occurred' : response.error);
             return;
         }
-        console.log('Post Id: ' + res.id);
+        res.send('Post Id: ' + response.id);
     });
 });
 
