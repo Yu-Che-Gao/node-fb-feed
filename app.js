@@ -4,9 +4,9 @@ const FacebookStrategy = require('passport-facebook').Strategy;
 const express = require('express');
 const app = express();
 const morgan = require('morgan');
-const cookieParser = reqiure('cookie-parser');
-const bodyParser = require('bodyParser');
-const expressSession = require('expressSession');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const expressSession = require('express-session');
 const appID = '1789586264586396';
 const appSecret = 'c8c9db0ef1c863ecc99f61d1041e662a';
 const port = process.env.PORT || 80;
@@ -46,10 +46,10 @@ app.use(passport.session());
 app.get('/', function (req, res) {
     //console.log(req.user.token); //取得userAccessToken
     var token = req.user.token; //取得短期accessToken
-    var accessToken='';
-    request('https://graph.facebook.com/oauth/access_token?client_id='+appID+'&client_secret='+appSecret+'&fb_exchange_token='+token, function (error, response, body) {
+    var accessToken = '';
+    request('https://graph.facebook.com/oauth/access_token?client_id=' + appID + '&client_secret=' + appSecret + '&fb_exchange_token=' + token, function (error, response, body) {
         if (!error && response.statusCode == 200) {
-            accessToken=body.split('&')[0].split('=')[1]; //取得長期60天accessToken
+            accessToken = body.split('&')[0].split('=')[1]; //取得長期60天accessToken
         }
     });
 
