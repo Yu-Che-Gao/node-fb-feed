@@ -58,8 +58,13 @@ app.get('/', function (req, res) {
         // res.send(body);
         let accessToken = res.send(body.split('&')[0].split('=')[1]);
         // request.post('https://graph.facebook.com/'+id+'/feed', )
-        request.post({ url: 'https://graph.facebook.com/' + id + '/feed', form: { message: 'testing message', access_token: accessToken } }, function (err, httpResponse, body) { 
-            res.send('發文!!');
+        request.post({ url: 'https://graph.facebook.com/' + id + '/feed', form: { message: 'testing message', access_token: accessToken } }, function (err, httpResponse, body) {
+            if (!err && httpResponse.status == 200) {
+                res.send(body);
+            } else {
+                res.send(err);
+            }
+
         });
     });
 
