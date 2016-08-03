@@ -54,7 +54,7 @@ app.get('/', function (req, res) {
         }
     });
 
-    FB.setAccessToken(accessToken);
+    FB.setAccessToken('EAACEdEose0cBAJmADEJzGfku5zKa4tzrR7JFKc4HmJ41VG5WcEaR2SA6DevNC6y9hasmPykIqtEoQiHrcGjONXlWne5BGufZASFp22SunefxZBY2qgZAtUkHHScT4AD6G8ZAFZCok9KYmEMnXlfWkeDHib94SEcLspW96rrHLiQZDZD');
     var body = 'My first post using facebook-node-sdk';
     FB.api(req.user.id + '/feed', 'post', { message: body }, function (response) {
         if (!response || response.error) {
