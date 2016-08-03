@@ -10,6 +10,7 @@ const expressSession = require('express-session');
 const request = require('request');
 const appID = '1789586264586396';
 const appSecret = 'c8c9db0ef1c863ecc99f61d1041e662a';
+const myCallBackURL = 'https://facebook-posts-bots.azurewebsites.net/auth/facebook/callback/';
 const port = process.env.PORT || 80;
 
 app.set('view engine', 'pug');
@@ -18,7 +19,7 @@ app.set('view engine', 'pug');
 passport.use(new FacebookStrategy({
     clientID: appID,
     clientSecret: appSecret,
-    callbackURL: 'https://facebook-posts-bots.azurewebsites.net/auth/facebook/callback/'
+    callbackURL: myCallBackURL
 },
     function (accessToken, refreshToken, profile, cb) {
         var user = {
@@ -44,37 +45,27 @@ app.use(expressSession({ secret: 'keyboard cat', resave: true, saveUninitialized
 app.use(passport.initialize());
 app.use(passport.session());
 
+var accessToken = '';
 app.get('/', function (req, res) {
-    //console.log(req.user.token); //取得userAccessToken
     var token = req.user.token; //取得短期accessToken
     var id = req.user.id;
-    var accessToken = '';
-    request('https://graph.facebook.com/oauth/access_token?client_id=' + appID + '&client_secret=' + appSecret + '&fb_exchange_token=' + token, function (error, response, body) {
-        if (!error && response.statusCode == 200) {
-            accessToken = body.split('&')[0].split('=')[1]; //取得長期60天accessToken
-            res.send(accessToken);
-            // console.log(accessToken);
-            // request.post('https://graph.facebook.com/' + id + '/feed').form({ message: 'testing message', access_token: accessToken }, function (err, httpResponse, body) {
-            //     if (!err && httpResponse.status == 200) {
-            //         res.send(body);
-            //     } else {
-            //         res.send(err);
-            //     }
-            // });
-        }
-    });
+    res.send(token);
+    //var accessToken = '';
 
-    // FB.setAccessToken('EAACEdEose0cBAJmADEJzGfku5zKa4tzrR7JFKc4HmJ41VG5WcEaR2SA6DevNC6y9hasmPykIqtEoQiHrcGjONXlWne5BGufZASFp22SunefxZBY2qgZAtUkHHScT4AD6G8ZAFZCok9KYmEMnXlfWkeDHib94SEcLspW96rrHLiQZDZD');
-    // var body = 'My first post using facebook-node-sdk';
-    // FB.api(req.user.id + '/feed', 'post', { message: body }, function (response) {
-    //     if (!response || response.error) {
-    //         res.send(!response ? 'error occurred' : response.error);
-    //         return;
+    // request('https://graph.facebook.com/oauth/access_token?client_id=' + appID + '&client_secret=' + appSecret + '&fb_exchange_token=' + token, function (error, response, body) {
+    //     if (!error && response.statusCode == 200) {
+    //         accessToken = body.split('&')[0].split('=')[1]; //取得長期60天accessToken
+    //         res.send(accessToken);
+    //         console.log(accessToken);
+    //         request.post('https://graph.facebook.com/' + id + '/feed').form({ message: 'testing message', access_token: accessToken }, function (err, httpResponse, body) {
+    //             if (!err && httpResponse.status == 200) {
+    //                 res.send(body);
+    //             } else {
+    //                 res.send(err);
+    //             }
+    //         });
     //     }
-    //     res.send('Post Id: ' + response.id);
     // });
-
-    // request('graph.facebook.com/' + req.user.id + '/feed');
 
 });
 
