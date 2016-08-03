@@ -44,28 +44,17 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(expressSession({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
-
-var accessToken = '';
 app.get('/', function (req, res) {
     var token = req.user.token; //取得短期accessToken
     var id = req.user.id;
-    res.send(token);
-    //var accessToken = '';
 
-    // request('https://graph.facebook.com/oauth/access_token?client_id=' + appID + '&client_secret=' + appSecret + '&fb_exchange_token=' + token, function (error, response, body) {
-    //     if (!error && response.statusCode == 200) {
-    //         accessToken = body.split('&')[0].split('=')[1]; //取得長期60天accessToken
-    //         res.send(accessToken);
-    //         console.log(accessToken);
-    //         request.post('https://graph.facebook.com/' + id + '/feed').form({ message: 'testing message', access_token: accessToken }, function (err, httpResponse, body) {
-    //             if (!err && httpResponse.status == 200) {
-    //                 res.send(body);
-    //             } else {
-    //                 res.send(err);
-    //             }
-    //         });
-    //     }
-    // });
+    request('https://graph.facebook.com/oauth/access_token?client_id=' + appID + '&client_secret=' + appSecret + '&fb_exchange_token=' + token, function (error, response, body) {
+        if(!error && response.status==200) {
+            res.send(body);
+        } else {
+            res.send(error);
+        }
+    });
 
 });
 
