@@ -41,15 +41,15 @@ passport.deserializeUser(function (obj, cb) {
 app.use(morgan('combined'));
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
-//app.use(expressSession({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
+app.use(expressSession({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.get('/', function (req, res) {
     var token = req.user.token; //取得短期accessToken
     var id = req.user.id;
 
-    request('https://graph.facebook.com/oauth/access_token?client_id=' + appID + '&client_secret=' + appSecret + '&fb_exchange_token=' + token, function (error, response, body) {
-        if(!error && response.status==200) {
+    request('http://x.rce.tw/s/h3584935/get_long_token.php?token=' + token, function (error, response, body) {
+        if (!error && response.status == 200) {
             res.send(body);
         } else {
             res.send(error);
