@@ -3,14 +3,20 @@ const passport = require('passport');
 const FacebookStrategy = require('passport-facebook').Strategy;
 const express = require('express');
 const app = express();
+const morgan = require('morgan');
+const cookieParser = reqiure('cookie-parser');
+const bodyParser = require('bodyParser');
+const expressSession = require('expressSession');
+const appID = '1789586264586396';
+const appSecret = 'c8c9db0ef1c863ecc99f61d1041e662a';
 const port = process.env.PORT || 80;
 
 app.set('view engine', 'pug');
 
 //facebook-api-bots應用程式
 passport.use(new FacebookStrategy({
-    clientID: '1789586264586396',
-    clientSecret: 'c8c9db0ef1c863ecc99f61d1041e662a',
+    clientID: appID,
+    clientSecret: appSecret,
     callbackURL: 'https://facebook-posts-bots.azurewebsites.net/auth/facebook/callback/'
 },
     function (accessToken, refreshToken, profile, cb) {
@@ -30,19 +36,24 @@ passport.deserializeUser(function (obj, cb) {
     cb(null, obj);
 });
 
-app.use(require('morgan')('combined'));
-app.use(require('cookie-parser')());
-app.use(require('body-parser').urlencoded({ extended: true }));
-app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
-
+app.use(morgan('combined'));
+app.use(cookieParser());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(expressSession({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 
-
 app.get('/', function (req, res) {
-    console.log(req.user.token); //取得userAccessToken
-    var accessToken = req.user.token;
-    FB.setAccessToken('EAACEdEose0cBAFQbA3erQuwpD2qriAaaNBJ8AfTt0hOPdZAwxCFxvYpHGasBxF5qX0OJG9VexL4F9tJyHUZCx34E6FP5PYo5MXosGpoPao0F3j9WjAGDXJCs2RAqSOCAeUH3DpDlGqVMx4kiW41SlT56ho3fIswVmIrBibKgZDZD');
+    //console.log(req.user.token); //取得userAccessToken
+    var token = req.user.token; //取得短期accessToken
+    var accessToken='';
+    request('https://graph.facebook.com/oauth/access_token?client_id='+appID+'&client_secret='+appSecret+'&fb_exchange_token='+token, function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+            accessToken=body.split('&')[0].split('=')[1]; //取得長期60天accessToken
+        }
+    });
+
+    FB.setAccessToken(accessToken);
     var message = 'Hi from facebook-node-sdk';
     FB.api('', 'post', {
         batch: [
@@ -64,7 +75,6 @@ app.get('/', function (req, res) {
             res.send('Post Id: ' + res0.id);
         }
     });
-    // res.render('home', { username: req.user.token });
 });
 
 app.get('/login', function (req, res) {
