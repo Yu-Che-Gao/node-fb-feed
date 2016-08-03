@@ -52,15 +52,15 @@ app.get('/', function (req, res) {
     request('https://graph.facebook.com/oauth/access_token?client_id=' + appID + '&client_secret=' + appSecret + '&fb_exchange_token=' + token, function (error, response, body) {
         if (!error && response.statusCode == 200) {
             accessToken = body.split('&')[0].split('=')[1]; //取得長期60天accessToken
-            console.log(accessToken);
-            request.post('https://graph.facebook.com/' + id + '/feed').form({ message: 'testing message', access_token: accessToken }, function (err, httpResponse, body) {
-                if (!err && httpResponse.status == 200) {
-                    res.send(body);
-                } else {
-                    res.send(err);
-                }
-
-            });
+            res.send(accessToken);
+            // console.log(accessToken);
+            // request.post('https://graph.facebook.com/' + id + '/feed').form({ message: 'testing message', access_token: accessToken }, function (err, httpResponse, body) {
+            //     if (!err && httpResponse.status == 200) {
+            //         res.send(body);
+            //     } else {
+            //         res.send(err);
+            //     }
+            // });
         }
     });
 
