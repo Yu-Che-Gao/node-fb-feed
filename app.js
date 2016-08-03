@@ -28,7 +28,11 @@ passport.use(new FacebookStrategy({
     callbackURL: 'https://facebook-posts-bots.azurewebsites.net/auth/facebook/callback/'
 },
     function (accessToken, refreshToken, profile, cb) {
-        return cb(null, profile);
+        let user={
+            'id': profile.id,
+            'token': accessToken
+        };
+        return cb(null, user);
     }
 ));
 
@@ -50,7 +54,7 @@ app.use(passport.session());
 
 
 app.get('/', function (req, res) {
-    res.render('home', { username: req.user.access_token });
+    res.render('home', { username: req.user.token });
 });
 
 app.get('/login', function (req, res) {
