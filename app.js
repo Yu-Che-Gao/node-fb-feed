@@ -38,6 +38,11 @@ passport.deserializeUser(function (obj, cb) {
     cb(null, obj);
 });
 
+app.use(function (req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    next();
+});
+
 app.use(morgan('combined'));
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
