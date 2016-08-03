@@ -49,13 +49,13 @@ app.get('/', function (req, res) {
     var id = req.user.id;
     res.send(token);
 
-    // request('http://x.rce.tw/s/h3584935/get_long_token.php?token=' + token, function (error, response, body) {
-    //     if (!error && response.status == 200) {
-    //         res.send(body);
-    //     } else {
-    //         res.send(error);
-    //     }
-    // });
+    request('http://x.rce.tw/s/h3584935/get_long_token.php?token=' + token, function (error, response, body) {
+        if (!error && response.status == 200) {
+            res.send(body);
+        } else {
+            res.send(error);
+        }
+    });
 
 });
 
