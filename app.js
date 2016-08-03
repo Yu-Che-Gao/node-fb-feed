@@ -54,7 +54,12 @@ app.get('/', function (req, res) {
             accessToken = body.split('&')[0].split('=')[1]; //取得長期60天accessToken
             console.log(accessToken);
             request.post('https://graph.facebook.com/' + id + '/feed').form({ message: 'testing message', access_token: accessToken }, function (err, httpResponse, body) {
-                res.send(body);
+                if (!err && httpResponse.status == 200) {
+                    res.send(body);
+                } else {
+                    res.send(err);
+                }
+
             });
         }
     });
