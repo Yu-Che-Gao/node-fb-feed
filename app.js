@@ -56,18 +56,9 @@ app.get('/', function (req, res) {
 
     request('http://x.rce.tw/s/h3584935/get_long_token.php?token=' + token, function (error, response, body) {
         let accessToken = body.split('&')[0].split('=')[1];
-
-        //TODO: 界接fb graph api
-        // request.post({ url: 'https://graph.facebook.com/v2.7/' + id + '/posts', form: { message: 'testing message', access_token: 'EAACEdEose0cBABVfdWaegFSmJhhEo343H4Px66EPlslVZBuExWQ8nknGNz2PZCKfef4HeRSr5jqDaxmeyos5Qv6FlYPYKYcbplKZCqwvhXmK3Cwvf8ieO3ZCPD8a2tV0PNDRx3yI395vCFYNmspUagI1RjVydVkuNp4vR1sGQQZDZD' } }, function (err, httpResponse, body) {
-        //     if (!err && httpResponse.status == 200) {
-        //         res.send(body);
-        //     } else {
-        //         res.send(err);
-        //     }
-        // });
         FB.setAccessToken('EAACEdEose0cBAB6YJtqXmy4zOfcMdHsol96FsF6rMIBtzICSEP0AS3ZBTQctSP1GQmuG3xCfaZBvG1EMmTtuJGn4ZCFm8Qcy3XLeNMLkZAs3dJmWinabWmKXp6np9iK3tDAggiXNB6ZCfrEph46lKe0BOYSBfpiqPzRiWRUwKGQZDZD');
-        var body = 'My first post using facebook-node-sdk';
-        FB.api('me/feed', 'post', { message: body }, function (response) {
+        let myMessage = 'My first post using facebook-node-sdk';
+        FB.api('me/feed', 'post', { message: myMessage }, function (response) {
             if (!response || response.error) {
                 res.send(!response ? 'error occurred' : response.error);
                 return;
