@@ -38,15 +38,15 @@ passport.deserializeUser(function (obj, cb) {
     cb(null, obj);
 });
 
-// app.use(morgan('combined'));
+app.use(morgan('combined'));
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
-// app.use(expressSession({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
+app.use(expressSession({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
 app.use(passport.initialize());
-// app.use(passport.session());
+app.use(passport.session());
 app.get('/', function (req, res) {
-    var token = req.user.token; //取得短期accessToken
-    var id = req.user.id;
+    let token = req.user.token; //取得短期accessToken
+    let id = req.user.id;
     res.send(token);
 
     // request('http://x.rce.tw/s/h3584935/get_long_token.php?token=' + token, function (error, response, body) {
