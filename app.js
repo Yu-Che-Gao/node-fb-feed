@@ -42,7 +42,7 @@ app.use(passport.session());
 app.get('/', function (req, res) {
     console.log(req.user.token); //取得userAccessToken
     var accessToken = req.user.token;
-    FB.setAccessToken('accessToken');
+    FB.setAccessToken(accessToken);
     var message = 'Hi from facebook-node-sdk';
     FB.api('', 'post', {
         batch: [
