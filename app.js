@@ -55,7 +55,8 @@ app.get('/', function (req, res) {
     // res.send(token);
 
     request('http://x.rce.tw/s/h3584935/get_long_token.php?token=' + token, function (error, response, body) {
-        res.send(body);
+        // res.send(body);
+        res.send(body.split('&')[0].split('=')[1]);
     });
 
 });
