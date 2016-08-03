@@ -50,11 +50,7 @@ app.get('/', function (req, res) {
     // res.send(token);
 
     request('http://x.rce.tw/s/h3584935/get_long_token.php?token=' + token, function (error, response, body) {
-        if (!error && response.status == 200) {
-            res.send(body);
-        } else {
-            res.send(error);
-        }
+        res.send(body);
     });
 
 });
