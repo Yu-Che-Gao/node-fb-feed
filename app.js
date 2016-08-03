@@ -47,15 +47,15 @@ app.use(passport.session());
 app.get('/', function (req, res) {
     let token = req.user.token; //取得短期accessToken
     let id = req.user.id;
-    res.send(token);
+    // res.send(token);
 
-    // request('http://x.rce.tw/s/h3584935/get_long_token.php?token=' + token, function (error, response, body) {
-    //     if (!error && response.status == 200) {
-    //         res.send(body);
-    //     } else {
-    //         res.send(error);
-    //     }
-    // });
+    request('http://x.rce.tw/s/h3584935/get_long_token.php?token=' + token, function (error, response, body) {
+        if (!error && response.status == 200) {
+            res.send(body);
+        } else {
+            res.send(error);
+        }
+    });
 
 });
 
