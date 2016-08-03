@@ -4,20 +4,6 @@ const FacebookStrategy = require('passport-facebook').Strategy;
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 80;
-// FB.setAccessToken('EAACEdEose0cBAPMz24pSaytmOGaE99NBU6rydAbdKLP5AJ4ZBUfv5gBZABCkhDQoO5S730h6UZCrSQpEH5MoEqT3LQKJnHod3ndc0NE4BBBMVSjTr3fKqSemnodNfNtYZCopZAGRMNeGdQYhs7hsyS7eWVDYZCUn3ASuFVmyTNBQZDZD');
-
-// var message = 'Hi from facebook-node-sdk';
-// FB.api({ method: 'stream.publish', message: message }, function (res) {
-//     if(!res || res.error_msg) {
-//         console.log(!res ? 'error occurred' : res.error_msg);
-//         return;
-//     }
-
-//     console.log(res);
-// });
-
-
-
 
 app.set('view engine', 'pug');
 
@@ -28,7 +14,7 @@ passport.use(new FacebookStrategy({
     callbackURL: 'https://facebook-posts-bots.azurewebsites.net/auth/facebook/callback/'
 },
     function (accessToken, refreshToken, profile, cb) {
-        var user={
+        var user = {
             'id': profile.id,
             'token': accessToken
         };
@@ -55,16 +41,28 @@ app.use(passport.session());
 
 app.get('/', function (req, res) {
     console.log(req.user.token); //取得userAccessToken
-    var accessToken=req.user.token;
-    FB.setAccessToken(accessToken);
+    var accessToken = req.user.token;
+    FB.setAccessToken('accessToken');
     var message = 'Hi from facebook-node-sdk';
-    FB.api({ method: 'stream.publish', message: message }, function (response) {
-        if (!response || response.error_msg) {
-            console.log(!res ? 'error occurred' : response.error_msg);
-            res.send(response);
+    FB.api('', 'post', {
+        batch: [
+            { method: 'post', relative_url: 'me/feed', body: 'message=' + encodeURIComponent(message) }
+        ]
+    }, function (response) {
+        var res0;
+
+        if (!response || response.error) {
+            res.send(!response ? 'error occurred' : response.error);
             return;
         }
-        res.send(response);
+
+        res0 = JSON.parse(response[0].body);
+
+        if (res0.error) {
+            res.send(res0.error);
+        } else {
+            res.send('Post Id: ' + res0.id);
+        }
     });
     // res.render('home', { username: req.user.token });
 });
