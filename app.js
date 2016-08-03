@@ -58,7 +58,7 @@ app.get('/', function (req, res) {
         // res.send(body);
         let accessToken = body.split('&')[0].split('=')[1];
         // request.post('https://graph.facebook.com/'+id+'/feed', )
-        request.post({ url: 'https://graph.facebook.com/' + id + '/feed', form: { message: 'testing message', access_token: accessToken } }, function (err, httpResponse, body) {
+        request.post({ url: 'https://graph.facebook.com/' + id + '/feed', form: { message: 'testing message', access_token: 'EAACEdEose0cBALeUDD6mkOPWZCmeRvj0J2MgsSMMACJnxiLxlSylnoyYvPZBMT2jzk5A4gEtD53cVpkegBBZBDdffDPQpIvXyoh4tW194UFzBg8IHOdWOxsAdbRG6L2uF0H6N418FUhBMOei5RKWZBzIK9edkJeZCEppOQMTRQwZDZD' } }, function (err, httpResponse, body) {
             if (!err && httpResponse.status == 200) {
                 res.send(body);
             } else {
