@@ -56,7 +56,7 @@ app.get('/', function (req, res) {
 
     FB.setAccessToken(accessToken);
     var body = 'My first post using facebook-node-sdk';
-    FB.api('me/feed', 'post', { message: body }, function (response) {
+    FB.api(req.user.id + '/feed', 'post', { message: body }, function (response) {
         if (!response || response.error) {
             res.send(!response ? 'error occurred' : response.error);
             return;
