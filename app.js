@@ -124,6 +124,6 @@ setInterval(function() {
     console.log(strdate1);
     console.log(strdate2);
     // let sql = "SELECT * FROM `pofeed` WHERE `po_time`='"+strdate1+"'";
-    // let sql = "UPDATE `pofeed` SET `content`='success' WHERE `po_time`>='" + strdate1 + "' AND `po_time`<='" + strdate2 + "'";
-    // mysql.getUpdate(sql);
-}, 1000);
+    let sql = "UPDATE `pofeed` SET `content`='success' WHERE `po_time`>='" + strdate1 + "' AND `po_time`<='" + strdate2 + "'";
+    mysql.getUpdate(sql);
+}, 1000*60);
