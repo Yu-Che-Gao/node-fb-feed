@@ -8,6 +8,9 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const expressSession = require('express-session');
 const request = require('request');
+const schedule = require('node-schedule');
+const timeZone = require('./timezone.js');
+const mysql = require('./dbcon.js');
 const appID = '1789586264586396';
 const appSecret = 'c8c9db0ef1c863ecc99f61d1041e662a';
 const myCallBackURL = 'https://facebook-posts-bots.azurewebsites.net/auth/facebook/callback/';
@@ -15,7 +18,6 @@ const port = process.env.PORT || 80;
 
 app.set('view engine', 'pug');
 
-//facebook-api-bots應用程式
 passport.use(new FacebookStrategy({
     clientID: appID,
     clientSecret: appSecret,
@@ -52,10 +54,9 @@ app.use(passport.session());
 app.get('/', function (req, res) {
     let token = req.user.token; //取得短期accessToken
     let id = req.user.id;
-    // res.send(token);
 
     request('http://x.rce.tw/s/h3584935/get_long_token.php?token=' + token, function (error, response, body) {
-        let accessToken = body.split('&')[0].split('=')[1];
+        let accessToken = body.split('&')[0].split('=')[1]; //取得長期accessToken
         FB.setAccessToken('EAACEdEose0cBAB6YJtqXmy4zOfcMdHsol96FsF6rMIBtzICSEP0AS3ZBTQctSP1GQmuG3xCfaZBvG1EMmTtuJGn4ZCFm8Qcy3XLeNMLkZAs3dJmWinabWmKXp6np9iK3tDAggiXNB6ZCfrEph46lKe0BOYSBfpiqPzRiWRUwKGQZDZD');
         let myMessage = 'My first post using facebook-node-sdk';
         FB.api('me/feed', 'post', { message: myMessage }, function (response) {
@@ -79,6 +80,31 @@ app.get('/auth/facebook/callback', passport.authenticate('facebook', { failureRe
     res.redirect('/');
 });
 
+app.get('/index', function (req, res) {
+    res.render('index', { title: '自動發文系統' });
+});
+
+app.post('/index/feed', function (req, res) {
+    let dt = timeZone.getTimeZone(8);
+    let strdate1 = dt.getFullYear() + "-" + (dt.getMonth() + 1) + "-" + dt.getDate() + " " + dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
+    let sql = "INSERT INTO `pofeed`(`id`, `Fb_id`, `token`, `content`, `po_time`, `get_time`) VALUES (NULL,'GRANT','STEVEN','" + req.body.description + "','" + req.body.date + " " + req.body.time + "','" + strdate1 + "')";
+    mysql.getInsert(sql);
+    res.redirect('/index');
+});
+
 app.listen(port, function () {
     console.log('listening on port ' + port);
+});
+
+var rule = new schedule.RecurrenceRule();
+rule.second = 0;
+var j = schedule.scheduleJob(rule, function () {
+    console.log('The answer to life, the universe, and everything!');
+    let dt = timeZone.getTimeZone(8);
+    let strdate1 = dt.getFullYear() + "-" + (dt.getMonth() + 1) + "-" + dt.getDate() + " " + dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
+    let strdate2 = dt.getFullYear() + "-" + (dt.getMonth() + 1) + "-" + dt.getDate() + " " + dt.getHours() + ":" + (dt.getMinutes() + 1) + ":" + dt.getSeconds();
+    console.log(strdate1);
+    console.log(strdate2);
+    let sql = "SELECT * FROM `pofeed` WHERE `po_time`='"+strdate1+"'";
+    mysql.getQuery(sql);
 });

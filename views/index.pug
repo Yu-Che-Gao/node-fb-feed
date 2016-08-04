@@ -1,0 +1,23 @@
+extends layout
+ 
+block content
+    h1= title
+    //- p Welcome to #{title}
+    form.am-form(action='/index/feed',name="add-estimation", method="post")
+     fieldset
+      legend 動態消息
+        div.am-g 
+           div.am-u-sm-6
+            span.label Date
+             input( type="text" name="date" placeholder="日期" id="my-start-2")
+           div.am-u-sm-6         
+            span.label Time
+             input(type="time" name="time" placeholder="時間" )
+             br
+        div.am-g 
+           div.am-u-sm-12   
+             span.label Content
+             textarea(name="description", cols="40", rows="5")            
+        div.actions
+            input.am-btn.am-btn-default(type="submit", value="送出")
+
