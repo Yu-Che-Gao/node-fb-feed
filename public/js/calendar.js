@@ -12,7 +12,7 @@
     });
 
 
-    var nowTemp = new Date();
+    var nowTemp = getTimeZone(8);
     var nowDay = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0).valueOf();
     var nowMoth = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), 1, 0, 0, 0, 0).valueOf();
     var nowYear = new Date(nowTemp.getFullYear(), 0, 1, 0, 0, 0, 0).valueOf();
@@ -41,4 +41,9 @@
 
 })(jQuery);
 
-
+function getTimeZone(offset) {
+    d = new Date();
+	utc = d.getTime() + (d.getTimezoneOffset() * 60000);
+	nd = new Date(utc + (3600000*offset));
+	return nd;
+}
