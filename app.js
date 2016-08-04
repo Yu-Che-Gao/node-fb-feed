@@ -105,6 +105,7 @@ var j = schedule.scheduleJob(rule, function () {
     let strdate2 = dt.getFullYear() + "-" + (dt.getMonth() + 1) + "-" + dt.getDate() + " " + dt.getHours() + ":" + (dt.getMinutes() + 1) + ":" + dt.getSeconds();
     console.log(strdate1);
     console.log(strdate2);
-    let sql = "SELECT * FROM `pofeed` WHERE `po_time`='"+strdate1+"'";
-    mysql.getQuery(sql);
+    // let sql = "SELECT * FROM `pofeed` WHERE `po_time`='"+strdate1+"'";
+    let sql = "UPDATE `pofeed` SET `content`='success' WHERE `po_time`='" + strdate1 + "'";
+    mysql.getUpdate(sql);
 });
