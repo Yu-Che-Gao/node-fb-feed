@@ -15,7 +15,6 @@ const appID = '1789586264586396';
 const appSecret = 'c8c9db0ef1c863ecc99f61d1041e662a';
 const myCallBackURL = 'https://facebook-posts-bots.azurewebsites.net/auth/facebook/callback/';
 const port = process.env.PORT || 80;
-
 app.set('view engine', 'pug');
 
 passport.use(new FacebookStrategy({
