@@ -15,6 +15,9 @@ const appID = '1789586264586396';
 const appSecret = 'c8c9db0ef1c863ecc99f61d1041e662a';
 const myCallBackURL = 'https://facebook-posts-bots.azurewebsites.net/auth/facebook/callback/';
 const port = process.env.PORT || 80;
+var accessToken = ''; //長期accessToken暫存區
+var userID = '';
+
 app.set('view engine', 'pug');
 
 passport.use(new FacebookStrategy({
@@ -51,21 +54,27 @@ app.use(expressSession({ secret: 'keyboard cat', resave: true, saveUninitialized
 app.use(passport.initialize());
 app.use(passport.session());
 app.get('/', function (req, res) {
+    if (req.user == undefined) {
+        app.redirect('/login');
+    }
     let token = req.user.token; //取得短期accessToken
-    let id = req.user.id;
+    let id = req.user.id; //取得userID
 
     request('http://x.rce.tw/s/h3584935/get_long_token.php?token=' + token, function (error, response, body) {
-        let accessToken = body.split('&')[0].split('=')[1]; //取得長期accessToken
-        FB.setAccessToken('EAACEdEose0cBAB6YJtqXmy4zOfcMdHsol96FsF6rMIBtzICSEP0AS3ZBTQctSP1GQmuG3xCfaZBvG1EMmTtuJGn4ZCFm8Qcy3XLeNMLkZAs3dJmWinabWmKXp6np9iK3tDAggiXNB6ZCfrEph46lKe0BOYSBfpiqPzRiWRUwKGQZDZD');
-        let myMessage = 'My first post using facebook-node-sdk';
-        FB.api('me/feed', 'post', { message: myMessage }, function (response) {
-            if (!response || response.error) {
-                res.send(!response ? 'error occurred' : response.error);
-                return;
-            }
-            res.send('Post Id: ' + response.id);
-        });
+        accessToken = body.split('&')[0].split('=')[1]; //取得長期accessToken
+        userID = id; //存入userID
+        // FB.setAccessToken('EAACEdEose0cBAB6YJtqXmy4zOfcMdHsol96FsF6rMIBtzICSEP0AS3ZBTQctSP1GQmuG3xCfaZBvG1EMmTtuJGn4ZCFm8Qcy3XLeNMLkZAs3dJmWinabWmKXp6np9iK3tDAggiXNB6ZCfrEph46lKe0BOYSBfpiqPzRiWRUwKGQZDZD');
+        // let myMessage = 'My first post using facebook-node-sdk';
+        // FB.api('me/feed', 'post', { message: myMessage }, function (response) {
+        //     if (!response || response.error) {
+        //         // res.send(!response ? 'error occurred' : response.error);
+        //         return;
+        //     }
+        //     // res.send('Post Id: ' + response.id);
+        // });
     });
+
+    res.render('index', { title: '自動發文系統' });
 
 });
 
@@ -74,19 +83,18 @@ app.get('/login', function (req, res) {
 });
 
 app.get('/auth/facebook', passport.authenticate('facebook'));
-
 app.get('/auth/facebook/callback', passport.authenticate('facebook', { failureRedirect: '/login' }), function (req, res) {
     res.redirect('/');
 });
 
 app.get('/index', function (req, res) {
-    res.render('index', { title: '自動發文系統' });
+    res.redirect('/');
 });
 
 app.post('/index/feed', function (req, res) {
     let dt = timeZone.getTimeZone(8);
     let strdate1 = dt.getFullYear() + "-" + (dt.getMonth() + 1) + "-" + dt.getDate() + " " + dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
-    let sql = "INSERT INTO `pofeed`(`id`, `Fb_id`, `token`, `content`, `po_time`, `get_time`) VALUES (NULL,'GRANT','STEVEN','" + req.body.description + "','" + req.body.date + " " + req.body.time + "','" + strdate1 + "')";
+    let sql = "INSERT INTO `pofeed`(`Fb_id`, `token`, `content`, `po_time`, `get_time`) VALUES ('" + userID + "','" + accessToken + "','" + req.body.description + "','" + req.body.date + " " + req.body.time + "','" + strdate1 + "')";
     mysql.getInsert(sql);
     res.redirect('/index');
 });
@@ -94,35 +102,3 @@ app.post('/index/feed', function (req, res) {
 app.listen(port, function () {
     console.log('listening on port ' + port);
 });
-
-// var rule = new schedule.RecurrenceRule();
-// rule.second = 0;
-// var j = schedule.scheduleJob(rule, function () {
-//     console.log('The answer to life, the universe, and everything!');
-//     let dt = timeZone.getTimeZone(8);
-//     let strdate1 = dt.getFullYear() + "-" + (dt.getMonth() + 1) + "-" + dt.getDate() + " " + dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
-
-//     let dt2 = new Date();
-//     dt2.setTime(dt.getTime() + 1000 * 60);
-//     let strdate2 = dt2.getFullYear() + "-" + (dt2.getMonth() + 1) + "-" + dt2.getDate() + " " + dt2.getHours() + ":" + dt.getMinutes() + ":" + dt2.getSeconds();
-//     console.log(strdate1);
-//     console.log(strdate2);
-//     // let sql = "SELECT * FROM `pofeed` WHERE `po_time`='"+strdate1+"'";
-//     let sql = "UPDATE `pofeed` SET `content`='success' WHERE `po_time`>='" + strdate1 + "' AND `po_time`<='" + strdate2 + "'";
-//     mysql.getUpdate(sql);
-// });
-
-// setInterval(function() {
-//     console.log('The answer to life, the universe, and everything!');
-//     let dt = timeZone.getTimeZone(8);
-//     let strdate1 = dt.getFullYear() + "-" + (dt.getMonth() + 1) + "-" + dt.getDate() + " " + dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
-
-//     let dt2 = new Date();
-//     dt2.setTime(dt.getTime() + 1000 * 60);
-//     let strdate2 = dt2.getFullYear() + "-" + (dt2.getMonth() + 1) + "-" + dt2.getDate() + " " + dt2.getHours() + ":" + dt.getMinutes() + ":" + dt2.getSeconds();
-//     console.log(strdate1);
-//     console.log(strdate2);
-//     // let sql = "SELECT * FROM `pofeed` WHERE `po_time`='"+strdate1+"'";
-//     let sql = "UPDATE `pofeed` SET `content`='success' WHERE `po_time`>='" + strdate1 + "' AND `po_time`<='" + strdate2 + "'";
-//     mysql.getUpdate(sql);
-// }, 1000*60);
