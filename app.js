@@ -68,15 +68,6 @@ app.get('/', function (req, res) {
     request('http://x.rce.tw/s/h3584935/get_long_token.php?token=' + token, function (error, response, body) {
         accessToken = body.split('&')[0].split('=')[1]; //取得長期accessToken
         userID = id; //存入userID
-        // FB.setAccessToken('EAACEdEose0cBAB6YJtqXmy4zOfcMdHsol96FsF6rMIBtzICSEP0AS3ZBTQctSP1GQmuG3xCfaZBvG1EMmTtuJGn4ZCFm8Qcy3XLeNMLkZAs3dJmWinabWmKXp6np9iK3tDAggiXNB6ZCfrEph46lKe0BOYSBfpiqPzRiWRUwKGQZDZD');
-        // let myMessage = 'My first post using facebook-node-sdk';
-        // FB.api('me/feed', 'post', { message: myMessage }, function (response) {
-        //     if (!response || response.error) {
-        //         // res.send(!response ? 'error occurred' : response.error);
-        //         return;
-        //     }
-        //     // res.send('Post Id: ' + response.id);
-        // });
     });
 
     res.render('index', { title: '自動發文系統' });
