@@ -54,11 +54,15 @@ app.use(expressSession({ secret: 'keyboard cat', resave: true, saveUninitialized
 app.use(passport.initialize());
 app.use(passport.session());
 app.get('/', function (req, res) {
-    if (!req.user.token) {
+    let token = '';
+    let id = '';
+    try {
+        token = req.user.token; //取得短期accessToken
+        id = req.user.id; //取得userID
+    } catch (e) {
         res.redirect('/login');
     }
-    let token = req.user.token; //取得短期accessToken
-    let id = req.user.id; //取得userID
+
 
     request('http://x.rce.tw/s/h3584935/get_long_token.php?token=' + token, function (error, response, body) {
         accessToken = body.split('&')[0].split('=')[1]; //取得長期accessToken
