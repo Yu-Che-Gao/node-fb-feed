@@ -55,7 +55,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.get('/', function (req, res) {
     if (req.user == null) {
-        app.redirect('/login');
+        res.redirect('/login');
     }
     let token = req.user.token; //取得短期accessToken
     let id = req.user.id; //取得userID
