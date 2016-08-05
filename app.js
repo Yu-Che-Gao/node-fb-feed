@@ -54,7 +54,7 @@ app.use(expressSession({ secret: 'keyboard cat', resave: true, saveUninitialized
 app.use(passport.initialize());
 app.use(passport.session());
 app.get('/', function (req, res) {
-    if (req.user == null || req.user.token == undefined) {
+    if (req.user == null || typeof (req.user.token) == 'null') {
         res.redirect('/login');
     }
     let token = req.user.token; //取得短期accessToken
