@@ -62,6 +62,7 @@ app.get('/', function (req, res) {
     } catch (e) {
         console.log('redirect to login page.');
         res.redirect('/login');
+        return;
     }
 
 
