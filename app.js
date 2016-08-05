@@ -60,6 +60,7 @@ app.get('/', function (req, res) {
         token = req.user.token; //取得短期accessToken
         id = req.user.id; //取得userID
     } catch (e) {
+        console.log('redirect to login page.');
         res.redirect('/login');
     }
 
